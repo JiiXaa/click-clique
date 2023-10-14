@@ -1,5 +1,9 @@
 # click-clique
 
+## User Stories
+
+- As a user I can create a new account, so that I can access all the features for signed up users.
+
 ## Technologies
 
 - React
