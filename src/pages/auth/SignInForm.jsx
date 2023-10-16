@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
 import Form from 'react-bootstrap/Form';
@@ -16,8 +16,11 @@ import btnStyles from '../../styles/Button.module.css';
 import appStyles from '../../App.module.css';
 
 import cameraImg from '../../assets/camera002.webp';
+import { SetCurrentUserContext } from '../../App';
 
 function SignInForm() {
+  const setCurrentUser = useContext(SetCurrentUserContext);
+
   const [signInData, setSignInData] = useState({
     username: '',
     password: '',
@@ -26,12 +29,17 @@ function SignInForm() {
 
   const [errors, setErrors] = useState({});
 
-  const history = useNavigate();
+  const navigate = useNavigate();
   const handleSubmit = async (event) => {
     event.preventDefault();
+
     try {
-      await axios.post('http://localhost:8000/dj-rest-auth/login/', signInData);
-      history.push('/');
+      const { data } = await axios.post(
+        'http://localhost:8000/dj-rest-auth/login/',
+        signInData
+      );
+      setCurrentUser(data.user);
+      navigate('/');
     } catch (err) {
       setErrors(err.response?.data);
     }
@@ -62,7 +70,7 @@ function SignInForm() {
               />
             </Form.Group>
 
-            {errors.username?.map((errorMsg, idx) => (
+            {errors?.username?.map((errorMsg, idx) => (
               <Alert key={idx} variant='warning'>
                 {errorMsg}
               </Alert>
@@ -80,7 +88,7 @@ function SignInForm() {
               />
             </Form.Group>
 
-            {errors.password?.map((errorMsg, idx) => (
+            {errors?.password?.map((errorMsg, idx) => (
               <Alert key={idx} variant='warning'>
                 {errorMsg}
               </Alert>
@@ -93,7 +101,7 @@ function SignInForm() {
               Sign in
             </Button>
 
-            {errors.non_field_errors?.map((errorMsg, idx) => (
+            {errors?.non_field_errors?.map((errorMsg, idx) => (
               <Alert key={idx} variant='warning' className='mt-3'>
                 {errorMsg}
               </Alert>
