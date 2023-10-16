@@ -5,3 +5,7 @@ axios.defaults.baseURL = 'http://localhost:3000';
 axios.defaults.headers.post['Content-Type'] = 'multipart/form-data';
 // withCredentials allows us to send cookies with our requests
 axios.defaults.withCredentials = true;
+
+axios.defaults.xsrfCookieName = 'csrftoken';
+
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
