@@ -1,3 +1,4 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React, { useContext, useState } from 'react';
 import axios from 'axios';
 
@@ -16,39 +17,40 @@ import btnStyles from '../../styles/Button.module.css';
 import appStyles from '../../App.module.css';
 
 import cameraImg from '../../assets/camera002.webp';
-import { SetCurrentUserContext } from '../../App';
 
 function SignInForm() {
-  const setCurrentUser = useContext(SetCurrentUserContext);
+  const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const [signInData, setSignInData] = useState({
     username: '',
     password: '',
   });
   const { username, password } = signInData;
-
   const [errors, setErrors] = useState({});
 
-  const navigate = useNavigate();
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    try {
-      const { data } = await axios.post(
-        'http://localhost:8000/dj-rest-auth/login/',
-        signInData
-      );
-      setCurrentUser(data.user);
+  const mutation = useMutation({
+    mutationFn: (signInData) =>
+      axios.post('http://localhost:8000/dj-rest-auth/login/', signInData),
+    mutationKey: 'signIn',
+    onSuccess: () => {
+      queryClient.invalidateQueries('user');
       navigate('/');
-    } catch (err) {
-      setErrors(err.response?.data);
-    }
+    },
+    onError: (error) => {
+      setErrors(error.response?.data);
+    },
+  });
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    mutation.mutate(signInData);
   };
 
-  const handleChange = (event) => {
+  const handleChange = (e) => {
     setSignInData({
       ...signInData,
-      [event.target.name]: event.target.value,
+      [e.target.name]: e.target.value,
     });
   };
 
