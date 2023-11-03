@@ -8,12 +8,16 @@ import {
   useSetCurrentUser,
 } from '../contexts/CurrentUserContext';
 
-import Avatar from './Avatar';
 import axios from 'axios';
+
+import Avatar from './Avatar';
+import useClickOutsideToggle from '../hooks/useClickOutsideToggle';
 
 const NavBar = () => {
   const currentUser = useCurrentUser();
   const setCurrentUser = useSetCurrentUser();
+
+  const { menuExpanded, setMenuExpanded, menuRef } = useClickOutsideToggle();
 
   const handleUserSignOut = async () => {
     try {
@@ -64,6 +68,7 @@ const NavBar = () => {
       </NavLink>
     </>
   );
+
   const loggedOutIcons = (
     <>
       <NavLink
@@ -86,13 +91,22 @@ const NavBar = () => {
   );
 
   return (
-    <Navbar className={styles.NavBar} expand='md' fixed='top'>
+    <Navbar
+      expanded={menuExpanded}
+      className={styles.NavBar}
+      expand='md'
+      fixed='top'
+    >
       <Container>
         <NavLink to='/'>
           <Navbar.Brand>LOGO</Navbar.Brand>
         </NavLink>
         {currentUser ? addPostIcon : ''}
-        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Navbar.Toggle
+          ref={menuRef}
+          onClick={() => setMenuExpanded(!menuExpanded)}
+          aria-controls='basic-navbar-nav'
+        />
         <Navbar.Collapse id='basic-navbar-nav'>
           <Nav className='ml-auto text-right'>
             <NavLink
