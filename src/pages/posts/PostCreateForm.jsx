@@ -13,6 +13,8 @@ import appStyles from '../../App.module.css';
 import btnStyles from '../../styles/Button.module.css';
 import Asset from '../../components/Asset';
 
+import Image from 'react-bootstrap/Image';
+
 function PostCreateForm() {
   const [errors, setErrors] = useState({});
 
@@ -114,7 +116,8 @@ function PostCreateForm() {
                 </Form.Label>
               )}
 
-              <Form.File
+              <Form.Control
+                type='file'
                 id='image-upload'
                 name='image'
                 accept='image/*'
