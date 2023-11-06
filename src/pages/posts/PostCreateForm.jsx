@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
@@ -14,6 +15,8 @@ import btnStyles from '../../styles/Button.module.css';
 import Asset from '../../components/Asset';
 
 import Image from 'react-bootstrap/Image';
+import { axiosReq } from '../../api/axiosDefaults';
+import { Alert } from 'react-bootstrap';
 
 function PostCreateForm() {
   const [errors, setErrors] = useState({});
@@ -25,6 +28,9 @@ function PostCreateForm() {
   });
 
   const { title, description, image } = postData;
+
+  const imageInput = useRef(null);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setPostData({ ...postData, [e.target.name]: e.target.value });
@@ -41,6 +47,33 @@ function PostCreateForm() {
     }
   };
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('image', imageInput.current.files[0]);
+
+    try {
+      const { data } = await axiosReq.post('/posts/', formData);
+      navigate(`/posts/${data.id}`);
+    } catch (error) {
+      console.log(error);
+      if (error.response?.status !== 401) {
+        setErrors(error.response?.data);
+      }
+    }
+  };
+
+  const navigateBack = () => {
+    if (window.history.state && window.history.state.idx > 0) {
+      navigate(-1);
+    } else {
+      navigate('/', { replace: true });
+    }
+  };
+
   const textFields = (
     <div className='text-center'>
       <Form.Group>
@@ -54,6 +87,12 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
+      {errors?.title?.map((errorMsg, idx) => (
+        <Alert key={idx} variant='warning'>
+          {errorMsg}
+        </Alert>
+      ))}
+
       <Form.Group>
         <Form.Label htmlFor='description'>Description</Form.Label>
         <Form.Control
@@ -67,10 +106,15 @@ function PostCreateForm() {
           onChange={handleChange}
         />
       </Form.Group>
+      {errors?.description?.map((errorMsg, idx) => (
+        <Alert key={idx} variant='warning'>
+          {errorMsg}
+        </Alert>
+      ))}
 
       <Button
         className={`${btnStyles.Button} ${btnStyles.Blue}`}
-        onClick={() => {}}
+        onClick={() => navigateBack()}
       >
         cancel
       </Button>
@@ -81,7 +125,7 @@ function PostCreateForm() {
   );
 
   return (
-    <Form>
+    <Form onSubmit={handleSubmit}>
       <Row>
         <Col className='py-2 p-0 p-md-2' md={7} lg={8}>
           <Container
@@ -122,8 +166,15 @@ function PostCreateForm() {
                 name='image'
                 accept='image/*'
                 onChange={handleChangeImage}
+                ref={imageInput}
               />
             </Form.Group>
+            {errors?.image?.map((errorMsg, idx) => (
+              <Alert key={idx} variant='warning'>
+                {errorMsg}
+              </Alert>
+            ))}
+
             <div className='d-md-none'>{textFields}</div>
           </Container>
         </Col>
