@@ -62,6 +62,8 @@ function PostCreateForm() {
       console.log(error);
       if (error.response?.status !== 401) {
         setErrors(error.response?.data);
+      } else {
+        alert('You are not authorized to perform this action.');
       }
     }
   };
