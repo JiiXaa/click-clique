@@ -35,7 +35,7 @@ function App() {
             element={
               <PostsPage
                 message='No results found. Adjust the search keyword or follow a user.'
-                filter={`owner__followed__owner__profile=${profile_id}`}
+                filter={`owner__followed__owner__profile=${profile_id}&`}
               />
             }
           />
