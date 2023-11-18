@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { axiosRes } from '../../api/axiosDefaults';
 
@@ -19,10 +19,13 @@ function PostsPage({ message, filter = '' }) {
   const [hasLoaded, setHasLoaded] = useState(false);
   const { pathname } = useLocation();
 
+  const [query, setQuery] = useState('');
+
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const { data } = await axiosRes.get(`/posts/?${filter}`);
+        // * query accepts a post title or post user username
+        const { data } = await axiosRes.get(`/posts/?${filter}search=${query}`);
         console.log(data);
         setPosts(data);
         setHasLoaded(true);
@@ -34,13 +37,31 @@ function PostsPage({ message, filter = '' }) {
     // * If the pathname changes, reset the hasLoaded state to false
     // * If the user is on the home page, fetch all posts. Otherwise, fetch posts based on the filter.
     setHasLoaded(false);
-    fetchPosts();
-  }, [filter, pathname]);
+
+    const debounceTimer = setTimeout(() => {
+      fetchPosts();
+    }, 1000);
+
+    return () => {
+      clearTimeout(debounceTimer);
+    };
+  }, [filter, query, pathname]);
 
   return (
     <Row className='h-100'>
       <Col className='py-2 p-0 p-lg-2' lg={8}>
         <p>Popular profiles mobile</p>
+        <i className={`fas fa-search ${styles.SearchIcon}`} />
+        <Form className={styles.SearchBar} onSubmit={(e) => e.preventDefault()}>
+          <Form.Control
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            type='text'
+            className='mr-sm-2'
+            placeholder='Search posts'
+          />
+        </Form>
+
         {hasLoaded ? (
           <>
             {posts.results.length ? (
