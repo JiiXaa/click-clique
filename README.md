@@ -7,6 +7,7 @@
 - As a user, I can view the details of a single post so that I can learn more about it.
 - As a user, I can view all the most recent posts, so that is up to date with the newest content.
 - As a user, I can search for posts with keywords, so that i can find the posts and user profiles I am most interested in.
+- As a user I can keep scrolling trough the images that are loaded automatically so that I don't have to click on "next page"
 
 ## Technologies
 

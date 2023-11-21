@@ -67,6 +67,10 @@ figure {
   display: inline-block;
 }
 
+img {
+  cursor: pointer;
+}
+
 /* scrollbar */
 *::-webkit-scrollbar {
   width: 5px;
