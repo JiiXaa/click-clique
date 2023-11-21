@@ -20,3 +20,7 @@
 - SPA (Single Page Application)
 - Auth (Connection to the Back-End)
 - 404 page
+
+## Notes
+
+- **Add JSDoc comments wherever possible as it provides clear code explanation**

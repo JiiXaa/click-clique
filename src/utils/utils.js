@@ -1,17 +1,23 @@
 import { axiosRes } from '../api/axiosDefaults';
 
-// * Can be reused with any paginated data like comments, posts and profiles.
+/**
+ * Fetches and appends more data for a paginated resource. This function is versatile and can be used for any type of paginated data, such as comments, posts, and profiles.
+ *
+ * @param {Object} resource - The current state of the resource, which includes a 'next' property. This 'next' property is a URL provided by the Django Rest Framework for fetching the next page of data.
+ * @param {Function} setResource - A state setter function for updating the resource state. This function takes a callback that receives the previous state and returns the new state.
+ *
+ * @example
+ * fetchMoreData(paginatedData, setPaginatedData);
+ */
 export const fetchMoreData = async (resource, setResource) => {
   try {
-    // * resource.next is a URL for the next page of data to fetch (if it exists) Next is a Django Rest Framework convention and is automatically added to the response data.
     const { data } = await axiosRes.get(resource.next);
+
     setResource((prevResource) => ({
       ...prevResource,
-      // * Link to the next page of results for the page we just fetched
-      next: data.next,
-      // * Spread the previous results and remove any duplicates
+      next: data.next, // Link to the next page of results.
       results: data.results.reduce((acc, cur) => {
-        // * If the current result is already in the accumulator, return the accumulator. Otherwise, return the accumulator with the current result added to it.
+        // Spread the previous results and remove any duplicates.
         return acc.some((accResult) => accResult.id === cur.id)
           ? acc
           : [...acc, cur];
