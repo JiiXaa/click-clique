@@ -52,7 +52,7 @@ function PostCreateForm() {
     const formData = new FormData();
 
     formData.append('title', title);
-    formData.append('description', description);
+    formData.append('content', description);
     formData.append('image', imageInput.current.files[0]);
 
     try {
