@@ -12,6 +12,7 @@ import SignInForm from './pages/auth/SignInForm';
 import PostCreateForm from './pages/posts/PostCreateForm';
 import PostPage from './pages/posts/PostPage';
 import PostsPage from './pages/posts/PostsPage';
+import PostEditForm from './pages/posts/PostEditForm';
 
 import { useCurrentUser } from './contexts/CurrentUserContext';
 
@@ -52,6 +53,7 @@ function App() {
           <Route path='/signup' element={<SignUpForm />} />
           <Route path='/posts/create' element={<PostCreateForm />} />
           <Route path='/posts/:postId' element={<PostPage />} />
+          <Route path='/posts/:postId/edit' element={<PostEditForm />} />
           {/* 404 Route */}
           <Route path='*' element={<h1>404 Not Found</h1>} />
         </Routes>
