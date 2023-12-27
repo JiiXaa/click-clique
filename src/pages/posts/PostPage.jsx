@@ -9,6 +9,7 @@ import { axiosRes } from '../../api/axiosDefaults';
 
 import { useParams } from 'react-router-dom';
 import Post from './Post';
+import Comment from '../comments/Comment';
 
 import CommentCreateForm from '../comments/CommentCreateForm';
 import { useCurrentUser } from '../../contexts/CurrentUserContext';
@@ -23,12 +24,15 @@ function PostPage() {
   useEffect(() => {
     const handleMount = async () => {
       try {
-        // destructure and rename data to post for clarity
-        const [{ data: post }] = await Promise.all([
+        // destructure and rename data to post and comments for clarity
+        const [{ data: post }, { data: comments }] = await Promise.all([
           axiosRes.get(`/posts/${postId}/`),
+          axiosRes.get(`/comments/?post=${postId}`),
         ]);
         setPost({ results: [post] });
-        console.log(post);
+        setComments(comments);
+        console.log('post', post);
+        console.log('comments', comments);
       } catch (error) {
         console.error(error);
       }
@@ -52,8 +56,15 @@ function PostPage() {
             />
           ) : comments.results.length ? (
             'Comments'
+          ) : null}
+          {comments.results.length ? (
+            comments.results.map((comment) => (
+              <Comment key={comment.id} {...comment} />
+            ))
+          ) : currentUser ? (
+            <span>Be the first to comment!</span>
           ) : (
-            'No comments yet'
+            <span>No comments yet...</span>
           )}
         </Container>
       </Col>

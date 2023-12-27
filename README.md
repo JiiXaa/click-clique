@@ -10,6 +10,7 @@
 - As a user I can keep scrolling trough the images that are loaded automatically so that I don't have to click on "next page"
 - As a post owner I can edit my post so that I can make corrections or update it after it was created.
 - As a logged in user I can add comments to a post so that I can share my thoughts about the post
+- As a user, I would like to read comments posted by users under posts so that I can be in touch with the community.
 
 ## Technologies
 
