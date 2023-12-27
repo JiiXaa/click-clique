@@ -10,10 +10,15 @@ import { axiosRes } from '../../api/axiosDefaults';
 import { useParams } from 'react-router-dom';
 import Post from './Post';
 
+import CommentCreateForm from '../comments/CommentCreateForm';
+import { useCurrentUser } from '../../contexts/CurrentUserContext';
+
 function PostPage() {
   const { postId } = useParams();
-
   const [post, setPost] = useState({ results: [] });
+  const currentUser = useCurrentUser();
+  const profileImg = currentUser?.profile_image;
+  const [comments, setComments] = useState({ results: [] });
 
   useEffect(() => {
     const handleMount = async () => {
@@ -36,7 +41,21 @@ function PostPage() {
       <Col className='py-2 p-0 p-lg-2' lg={8}>
         <p>Popular profiles for mobile</p>
         <Post {...post.results[0]} setPosts={setPost} postPage />
-        <Container className={appStyles.Content}>Comments</Container>
+        <Container className={appStyles.Content}>
+          {currentUser ? (
+            <CommentCreateForm
+              profile_id={currentUser?.profile_id}
+              profileImg={profileImg}
+              post={postId}
+              setPost={setPost}
+              setComments={setComments}
+            />
+          ) : comments.results.length ? (
+            'Comments'
+          ) : (
+            'No comments yet'
+          )}
+        </Container>
       </Col>
       <Col lg={4} className='d-none d-lg-block p-0 p-lg-2'>
         Popular profiles for desktop
