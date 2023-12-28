@@ -1,4 +1,4 @@
-import { Card } from 'react-bootstrap';
+import { Card, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import styles from '../../styles/Comment.module.css';
@@ -10,14 +10,20 @@ const Comment = (props) => {
     <div>
       <hr />
       <Card>
-        <Link to={`/profiles/${profile_id}`}>
-          <Avatar src={profile_image} />
-        </Link>
-        <Card.Body className='align-self-center ml-2'>
-          <span className={styles.Owner}>{owner}</span>
-          <span className={styles.Date}>{updated_at}</span>
-          <p>{content}</p>
-        </Card.Body>
+        <Row className='align-items-center'>
+          <Col xs='auto'>
+            <Link to={`/profiles/${profile_id}`}>
+              <Avatar src={profile_image} />
+            </Link>
+          </Col>
+          <Col>
+            <Card.Body>
+              <span className={styles.Owner}>{owner}</span>
+              <span className={styles.Date}>{updated_at}</span>
+              <p>{content}</p>
+            </Card.Body>
+          </Col>
+        </Row>
       </Card>
     </div>
   );
