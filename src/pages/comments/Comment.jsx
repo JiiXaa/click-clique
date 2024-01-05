@@ -1,8 +1,12 @@
+import { useState } from 'react';
+
 import { Card, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import styles from '../../styles/Comment.module.css';
 import { MoreDropdown } from '../../components/MoreDropdown';
+import CommentEditForm from './CommentEditForm';
+
 import { useCurrentUser } from '../../contexts/CurrentUserContext';
 import { axiosRes } from '../../api/axiosDefaults';
 
@@ -18,6 +22,7 @@ const Comment = (props) => {
     setComments,
   } = props;
 
+  const [showEditForm, setShowEditForm] = useState(false);
   const currentUser = useCurrentUser();
   const is_owner = currentUser?.username === owner;
 
@@ -55,11 +60,29 @@ const Comment = (props) => {
             <Card.Body>
               <span className={styles.Owner}>{owner}</span>
               <span className={styles.Date}>{updated_at}</span>
-              <p>{content}</p>
+              {showEditForm ? (
+                <CommentEditForm
+                  id={id}
+                  profile_id={profile_id}
+                  content={content}
+                  profile_image={profile_image}
+                  setShowEditForm={setShowEditForm}
+                  setComments={setComments}
+                />
+              ) : (
+                <p>{content}</p>
+              )}
             </Card.Body>
           </Col>
           <Col xs='auto' className='ms-auto'>
-            <MoreDropdown handleEdit={() => {}} handleDelete={handleDelete} />
+            {is_owner && !showEditForm && (
+              <MoreDropdown
+                handleEdit={() => {
+                  setShowEditForm(true);
+                }}
+                handleDelete={handleDelete}
+              />
+            )}
           </Col>
         </Row>
       </Card>
