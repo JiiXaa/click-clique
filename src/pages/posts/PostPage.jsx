@@ -8,6 +8,11 @@ import appStyles from '../../App.module.css';
 import { axiosRes } from '../../api/axiosDefaults';
 
 import { useParams } from 'react-router-dom';
+
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Asset from '../../components/Asset';
+import { fetchMoreData } from '../../utils/utils';
+
 import Post from './Post';
 import Comment from '../comments/Comment';
 
@@ -58,18 +63,25 @@ function PostPage() {
             'Comments'
           ) : null}
           {comments.results.length ? (
-            comments.results.map((comment) => (
-              <Comment
-                key={comment.id}
-                {...comment}
-                setPost={setPost}
-                setComments={setComments}
-              />
-            ))
+            <InfiniteScroll
+              dataLength={comments.results.length}
+              loader={<Asset spinner />}
+              hasMore={!!comments.next}
+              next={() => fetchMoreData(comments, setComments)}
+            >
+              {comments.results.map((comment) => (
+                <Comment
+                  key={comment.id}
+                  {...comment}
+                  setComments={setComments}
+                  setPost={setPost}
+                />
+              ))}
+            </InfiniteScroll>
           ) : currentUser ? (
-            <span>Be the first to comment!</span>
+            <span>No comments yet, be the first to comment!</span>
           ) : (
-            <span>No comments yet...</span>
+            <span>No comments... yet</span>
           )}
         </Container>
       </Col>
