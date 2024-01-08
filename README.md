@@ -12,6 +12,7 @@
 - As a logged in user I can add comments to a post so that I can share my thoughts about the post.
 - As a user, I would like to read comments posted by users under posts so that I can be in touch with the community.
 - As an owner of a comment I can edit my comment so that I can fix or update my existing comment.
+- As a user I can see a list of the most followed profiles so that I can see which profiles are popular.
 
 ## Technologies
 
