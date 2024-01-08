@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Card, Row, Col } from 'react-bootstrap';
+import { Card, Row, Col, Container } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import Avatar from '../../components/Avatar';
 import styles from '../../styles/Comment.module.css';
@@ -50,41 +50,43 @@ const Comment = (props) => {
     <div>
       <hr />
       <Card>
-        <Row className='align-items-center'>
-          <Col xs='auto'>
-            <Link to={`/profiles/${profile_id}`}>
-              <Avatar src={profile_image} />
-            </Link>
-          </Col>
-          <Col>
-            <Card.Body>
-              <span className={styles.Owner}>{owner}</span>
-              <span className={styles.Date}>{updated_at}</span>
-              {showEditForm ? (
-                <CommentEditForm
-                  id={id}
-                  profile_id={profile_id}
-                  content={content}
-                  profile_image={profile_image}
-                  setShowEditForm={setShowEditForm}
-                  setComments={setComments}
+        <Container>
+          <Row className='align-items-center'>
+            <Col xs='auto'>
+              <Link to={`/profiles/${profile_id}`}>
+                <Avatar src={profile_image} />
+              </Link>
+            </Col>
+            <Col>
+              <Card.Body>
+                <span className={styles.Owner}>{owner}</span>
+                <span className={styles.Date}>{updated_at}</span>
+                {showEditForm ? (
+                  <CommentEditForm
+                    id={id}
+                    profile_id={profile_id}
+                    content={content}
+                    profile_image={profile_image}
+                    setShowEditForm={setShowEditForm}
+                    setComments={setComments}
+                  />
+                ) : (
+                  <p>{content}</p>
+                )}
+              </Card.Body>
+            </Col>
+            <Col xs='auto' className='ms-auto'>
+              {is_owner && !showEditForm && (
+                <MoreDropdown
+                  handleEdit={() => {
+                    setShowEditForm(true);
+                  }}
+                  handleDelete={handleDelete}
                 />
-              ) : (
-                <p>{content}</p>
               )}
-            </Card.Body>
-          </Col>
-          <Col xs='auto' className='ms-auto'>
-            {is_owner && !showEditForm && (
-              <MoreDropdown
-                handleEdit={() => {
-                  setShowEditForm(true);
-                }}
-                handleDelete={handleDelete}
-              />
-            )}
-          </Col>
-        </Row>
+            </Col>
+          </Row>
+        </Container>
       </Card>
     </div>
   );
