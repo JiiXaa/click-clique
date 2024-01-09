@@ -59,7 +59,7 @@ function PostsPage({ message, filter = '' }) {
   return (
     <Row className='h-100'>
       <Col className='py-2 p-0 p-lg-2' lg={8}>
-        <p>Popular profiles mobile</p>
+        <PopularProfiles mobile />
         <i className={`fas fa-search ${styles.SearchIcon}`} />
         <Form className={styles.SearchBar} onSubmit={(e) => e.preventDefault()}>
           <Form.Control
@@ -97,9 +97,6 @@ function PostsPage({ message, filter = '' }) {
         )}
       </Col>
       <Col md={4} className='d-none d-lg-block p-0 p-lg-2'>
-        {/* ADD IN DOCS: Most followed profiles (does not get rerendered when user navigates
-        between Home, Feed and Liked pages as it is same component located in
-        App component) */}
         <PopularProfiles />
       </Col>
     </Row>

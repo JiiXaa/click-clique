@@ -29,3 +29,7 @@
 ## Notes
 
 - **Add JSDoc comments wherever possible as it provides clear code explanation**
+- **Most followed profiles (does not get rerendered when user navigates between Home, Feed and Liked pages as it is same component located in App component)**
+- **Popular profiles:**
+  - Desktop view displays 10 most followed profiles
+  - Mobile view displays 4 most followed profiles
