@@ -7,6 +7,7 @@ import { axiosRes } from '../../api/axiosDefaults';
 
 import { useCurrentUser } from '../../contexts/CurrentUserContext';
 import Asset from '../../components/Asset';
+import Profile from './Profile';
 
 const PopularProfiles = ({ mobile }) => {
   const [profileData, setProfileData] = useState({
@@ -49,14 +50,14 @@ const PopularProfiles = ({ mobile }) => {
             <div className='d-flex justify-content-around'>
               {popularProfiles.results.slice(0, 4).map((profile) => (
                 <div key={profile.id}>
-                  <p>{profile.owner}</p>
+                  <Profile key={profile.id} profile={profile} mobile />
                 </div>
               ))}
             </div>
           ) : (
             popularProfiles.results.map((profile) => (
               <div key={profile.id}>
-                <p>{profile.owner}</p>
+                <Profile key={profile.id} profile={profile} />
               </div>
             ))
           )}
