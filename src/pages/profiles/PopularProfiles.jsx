@@ -1,41 +1,13 @@
-import { useEffect, useState } from 'react';
-
 import appStyles from '../../App.module.css';
-
 import { Container } from 'react-bootstrap';
-import { axiosRes } from '../../api/axiosDefaults';
 
-import { useCurrentUser } from '../../contexts/CurrentUserContext';
+import { useProfileData } from '../../contexts/ProfileDataContext';
+
 import Asset from '../../components/Asset';
 import Profile from './Profile';
 
 const PopularProfiles = ({ mobile }) => {
-  const [profileData, setProfileData] = useState({
-    // * Both profile states are in same state to keep them in sync.
-    // !!! add pageProfile later.
-    pageProfile: { results: [] },
-    popularProfiles: { results: [] },
-  });
-
-  const { popularProfiles } = profileData;
-  const currentUser = useCurrentUser();
-
-  useEffect(() => {
-    const handleMount = async () => {
-      try {
-        const { data } = await axiosRes.get(
-          '/profiles/?ordering=-followers_count'
-        );
-        setProfileData((prevProfileData) => ({
-          ...prevProfileData,
-          popularProfiles: data,
-        }));
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    handleMount();
-  }, [currentUser]);
+  const { popularProfiles } = useProfileData();
 
   return (
     <Container

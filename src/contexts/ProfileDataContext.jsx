@@ -10,6 +10,9 @@ export const useSetProfileData = () => useContext(SetProfileDataContext);
 
 export const ProfileDataProvider = ({ children }) => {
   const [profileData, setProfileData] = useState({
+    // * Both profile states are in same state to keep them in sync.
+    // !!! add pageProfile later.
+    pageProfile: { results: [] },
     popularProfiles: { results: [] },
   });
 
