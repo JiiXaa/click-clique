@@ -14,6 +14,7 @@
 - As an owner of a comment I can edit my comment so that I can fix or update my existing comment.
 - As a user I can see a list of the most followed profiles so that I can see which profiles are popular.
 - As a user, I can view basic profile information like profile picture and name so that I can easily check a user's profile page.
+- As a user I can view other users profiles so that I can see their profile stats and learn more about them.
 
 ## Technologies
 
