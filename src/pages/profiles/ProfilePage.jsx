@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import Col from 'react-bootstrap/Col';
 import Row from 'react-bootstrap/Row';
 import Container from 'react-bootstrap/Container';
+import Image from 'react-bootstrap/Image';
 
 import Asset from '../../components/Asset';
 
@@ -12,29 +13,92 @@ import btnStyles from '../../styles/Button.module.css';
 
 import PopularProfiles from './PopularProfiles';
 import { useCurrentUser } from '../../contexts/CurrentUserContext';
+import { axiosRes } from '../../api/axiosDefaults';
+
+import { useParams } from 'react-router-dom';
+import {
+  useProfileData,
+  useSetProfileData,
+} from '../../contexts/ProfileDataContext';
 
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
   const currentUser = useCurrentUser();
+  const { profileId } = useParams();
+  const setProfileData = useSetProfileData();
+  const { pageProfile } = useProfileData();
+  const [profile] = pageProfile.results;
+  const is_owner = currentUser?.username === profile?.owner;
+
+  console.log('profile', profile);
 
   useEffect(() => {
-    setHasLoaded(true);
-  }, []);
+    const fetchData = async () => {
+      try {
+        const [{ data: pageProfile }] = await Promise.all([
+          axiosRes.get(`/profiles/${profileId}/`),
+        ]);
+        setProfileData((prevState) => ({
+          ...prevState,
+          pageProfile: { results: [pageProfile] },
+        }));
+        setHasLoaded(true);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, [profileId, setProfileData]);
 
   const mainProfile = (
     <>
-      <Row noGutters className='px-3 text-center'>
+      <Row className='px-3 text-center'>
         <Col lg={3} className='text-lg-left'>
-          <p>Image</p>
+          <Image
+            className={styles.ProfileImage}
+            roundedCircle
+            src={profile?.image}
+          />
         </Col>
         <Col lg={6}>
-          <h3 className='m-2'>Profile username</h3>
-          <p>Profile stats</p>
+          <h3 className='m-2'>{profile?.owner}</h3>
+          <Row className='justify-content-center g-0'>
+            <Col xs={3} className='my-2'>
+              <div>{profile?.posts_count}</div>
+              <div>posts</div>
+            </Col>
+            <Col xs={3} className='my-2'>
+              <div>{profile?.followers_count}</div>
+              <div>followers</div>
+            </Col>
+            <Col xs={3} className='my-2'>
+              <div>{profile?.following_count}</div>
+              <div>following</div>
+            </Col>
+          </Row>
         </Col>
         <Col lg={3} className='text-lg-right'>
-          <p>Follow button</p>
+          {currentUser &&
+            !is_owner &&
+            (profile?.following_id ? (
+              <button
+                className={`${btnStyles.Button} ${btnStyles.BlackOutline}`}
+                onClick={() => console.log('unfollow')}
+                type='button'
+              >
+                Unfollow
+              </button>
+            ) : (
+              <button
+                className={`${btnStyles.Button} ${btnStyles.Black}`}
+                onClick={() => console.log('follow')}
+                type='button'
+              >
+                Follow
+              </button>
+            ))}
         </Col>
-        <Col className='p-3'>Profile content</Col>
+        {profile?.content && <Col className='p-3'>{profile.content}</Col>}
       </Row>
     </>
   );
