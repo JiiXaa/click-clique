@@ -21,27 +21,40 @@ import {
   useSetProfileData,
 } from '../../contexts/ProfileDataContext';
 
+import InfiniteScroll from 'react-infinite-scroll-component';
+import Post from '../posts/Post';
+import { fetchMoreData } from '../../utils/utils';
+import NoResults from '../../assets/no-results.png';
+
 function ProfilePage() {
   const [hasLoaded, setHasLoaded] = useState(false);
+  const [profilePosts, setProfilePosts] = useState({ results: [] });
+
   const currentUser = useCurrentUser();
   const { profileId } = useParams();
+
   const setProfileData = useSetProfileData();
   const { pageProfile } = useProfileData();
+
   const [profile] = pageProfile.results;
   const is_owner = currentUser?.username === profile?.owner;
 
   console.log('profile', profile);
+  console.log('profilePosts', profilePosts);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [{ data: pageProfile }] = await Promise.all([
-          axiosRes.get(`/profiles/${profileId}/`),
-        ]);
+        const [{ data: pageProfile }, { data: profilePosts }] =
+          await Promise.all([
+            axiosRes.get(`/profiles/${profileId}/`),
+            axiosRes.get(`/posts/?owner__profile=${profileId}`),
+          ]);
         setProfileData((prevState) => ({
           ...prevState,
           pageProfile: { results: [pageProfile] },
         }));
+        setProfilePosts(profilePosts);
         setHasLoaded(true);
       } catch (error) {
         console.error(error);
@@ -106,8 +119,25 @@ function ProfilePage() {
   const mainProfilePosts = (
     <>
       <hr />
-      <p className='text-center'>Profile owner's posts</p>
+      <p className='text-center'>{profile?.owner}'s posts</p>
       <hr />
+      {profilePosts.results.length ? (
+        <InfiniteScroll
+          dataLength={profilePosts.results.length}
+          loader={<Asset spinner />}
+          hasMore={!!profilePosts.next}
+          next={() => fetchMoreData(profilePosts, setProfilePosts)}
+        >
+          {profilePosts.results.map((post) => (
+            <Post key={post.id} {...post} setPosts={setProfilePosts} />
+          ))}
+        </InfiniteScroll>
+      ) : (
+        <Asset
+          src={NoResults}
+          message={`No results found, ${profile?.owner} hasn't posted yet.`}
+        />
+      )}
     </>
   );
 
