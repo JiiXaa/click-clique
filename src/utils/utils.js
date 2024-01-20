@@ -61,3 +61,37 @@ export const followHelper = (profile, clickedProfile, following_id) => {
     : // this is not the profile that was clicked or the profile the user owns, so return the profile as is
       profile;
 };
+
+/**
+ * Updates profile data in the frontend state after an unfollow action is performed. This function adjusts the follower and following counts appropriately, depending on whether the profile being unfollowed or the current user's profile is being updated.
+ *
+ * @param {Object} profile - The profile currently being processed. This could be any user's profile from the list of profiles.
+ * @param {Object} clickedProfile - The profile that the current user has clicked on to unfollow.
+ *
+ * @returns {Object} The updated profile object. If the profile is the one being unfollowed, its followers_count is decremented and following_id is set to null. If the profile belongs to the current user, its following_count is decremented. Otherwise, the profile is returned unchanged.
+ *
+ * @example
+ * const updatedProfiles = profileData.map((profile) =>
+ *   unfollowHelper(profile, clickedProfile)
+ * );
+ */
+
+export const unfollowHelper = (profile, clickedProfile) => {
+  return profile.id === clickedProfile.id
+    ? // This is the profile that was clicked
+      // update followers count and set following_id
+      {
+        ...profile,
+        following_id: null,
+        followers_count: profile.followers_count - 1,
+      }
+    : profile.is_owner
+    ? // This is the current user's profile
+      // update the following count
+      {
+        ...profile,
+        following_count: profile.following_count - 1,
+      }
+    : // this is not the profile that was clicked or the profile the user owns, so return the profile as is
+      profile;
+};
