@@ -17,9 +17,11 @@ import appStyles from '../../App.module.css';
 
 import cameraImg from '../../assets/camera002.webp';
 import { useSetCurrentUser } from '../../contexts/CurrentUserContext';
+import { useRedirect } from '../../hooks/useRedirect';
 
 function SignInForm() {
   const setCurrentUser = useSetCurrentUser();
+  useRedirect('loggedIn');
 
   const [signInData, setSignInData] = useState({
     username: '',
@@ -39,7 +41,7 @@ function SignInForm() {
         signInData
       );
       setCurrentUser(data.user);
-      navigate('/');
+      navigate(-1);
     } catch (err) {
       setErrors(err.response?.data);
     }
