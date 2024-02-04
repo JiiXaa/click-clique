@@ -18,6 +18,7 @@ import appStyles from '../../App.module.css';
 import cameraImg from '../../assets/camera002.webp';
 import { useSetCurrentUser } from '../../contexts/CurrentUserContext';
 import { useRedirect } from '../../hooks/useRedirect';
+import { setTokenTimestamp } from '../../utils/utils';
 
 function SignInForm() {
   const setCurrentUser = useSetCurrentUser();
@@ -41,6 +42,7 @@ function SignInForm() {
         signInData
       );
       setCurrentUser(data.user);
+      setTokenTimestamp(data);
       navigate(-1);
     } catch (err) {
       setErrors(err.response?.data);
