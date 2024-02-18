@@ -17,11 +17,14 @@ import NoResults from '../../assets/no-results.png';
 import Asset from '../../components/Asset';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { fetchMoreData } from '../../utils/utils';
+import { useCurrentUser } from '../../contexts/CurrentUserContext';
 
 function PostsPage({ message, filter = '' }) {
   const [posts, setPosts] = useState({ results: [] });
   const [hasLoaded, setHasLoaded] = useState(false);
   const { pathname } = useLocation();
+  // ? Get the current user from the context and add it to the dependency array to re-fetch posts when the user logs in or out
+  const currentUser = useCurrentUser();
 
   const [query, setQuery] = useState('');
 
@@ -53,7 +56,7 @@ function PostsPage({ message, filter = '' }) {
     return () => {
       clearTimeout(debounceTimer);
     };
-  }, [filter, query, pathname]);
+  }, [filter, query, pathname, currentUser]);
 
   return (
     <Row className='h-100'>
