@@ -34,7 +34,6 @@ function PostEditForm() {
     const handleMount = async () => {
       try {
         const { data } = await axiosReq.get(`/posts/${postId}/`);
-        console.log(data);
         const { title, content, image, is_owner } = data;
 
         is_owner ? setPostData({ title, content, image }) : navigate(-1);
@@ -75,7 +74,7 @@ function PostEditForm() {
       await axiosReq.put(`/posts/${postId}/`, formData);
       navigate(`/posts/${postId}`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error.response?.status !== 401) {
         setErrors(error.response?.data);
       } else {

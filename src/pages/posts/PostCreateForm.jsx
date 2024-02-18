@@ -61,7 +61,7 @@ function PostCreateForm() {
       const { data } = await axiosReq.post('/posts/', formData);
       navigate(`/posts/${data.id}`);
     } catch (error) {
-      console.log(error);
+      console.error(error);
       if (error.response?.status !== 401) {
         setErrors(error.response?.data);
       } else {

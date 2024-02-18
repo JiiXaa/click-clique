@@ -35,7 +35,6 @@ function PostsPage({ message, filter = '' }) {
       try {
         // * query accepts a post title or post user username
         const { data } = await axiosRes.get(`/posts/?${filter}search=${query}`);
-        console.log(data);
         setPosts(data);
         setHasLoaded(true);
       } catch (error) {

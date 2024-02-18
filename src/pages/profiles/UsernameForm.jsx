@@ -28,8 +28,6 @@ const UsernameForm = () => {
   const setCurrentUser = useSetCurrentUser();
 
   useEffect(() => {
-    console.log('currentUser id', currentUser?.profile_id?.toString());
-    console.log('id', id);
     if (currentUser?.profile_id?.toString() === id) {
       setUsername(currentUser.username);
     } else {

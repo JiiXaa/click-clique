@@ -37,8 +37,6 @@ function PostPage() {
         ]);
         setPost({ results: [post] });
         setComments(comments);
-        console.log('post', post);
-        console.log('comments', comments);
       } catch (error) {
         console.error(error);
       }

@@ -78,7 +78,7 @@ const ProfileEditForm = () => {
       }));
       navigate(-1);
     } catch (err) {
-      console.log(err);
+      console.error(err);
       setErrors(err.response?.data);
     }
   };
