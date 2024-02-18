@@ -14,6 +14,7 @@ import PostPage from './pages/posts/PostPage';
 import PostsPage from './pages/posts/PostsPage';
 import PostEditForm from './pages/posts/PostEditForm';
 import ProfilePage from './pages/profiles/ProfilePage';
+import NotFound from './components/NotFound';
 
 import { useCurrentUser } from './contexts/CurrentUserContext';
 import UsernameForm from './pages/profiles/UsernameForm';
@@ -69,7 +70,7 @@ function App() {
           />
           <Route path='/profiles/:id/edit' element={<ProfileEditForm />} />
           {/* 404 Route */}
-          <Route path='*' element={<h1>404 Not Found</h1>} />
+          <Route path='*' element={<NotFound />} />
         </Routes>
       </Container>
     </div>
